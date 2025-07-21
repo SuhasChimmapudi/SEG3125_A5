@@ -70,12 +70,15 @@ function hasEmptyBarData(filteredData, quarter) {
   return areas.some(area => 
     types.some(type => {
       const record = filteredData.find(d => d.Geography === area && d["Rental unit type"] === type);
-      if (!record) return false;
+
+      if (!record) return true; // <-- treat missing record as empty data
+      
       const val = record[quarter];
-      return val === '..' || val?.trim() === '..';
+      return val === '..' || val?.trim() === '' || val?.trim() === '..';
     })
   );
 }
+
 
 function hasEstimatedBarData(filteredData, quarter) {
   const areas = [...new Set(filteredData.map(d => d.Geography))];
